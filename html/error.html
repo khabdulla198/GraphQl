@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body class="error-page">
+
+  <audio id="hurt-sound" src="../sounds/classic_hurt.mp3" preload="auto"></audio>
+  <audio id="click-sound" src="../sounds/minecraft_click.mp3" preload="auto"></audio>
+
+  <main class="error-screen">
+    <div class="error-panel">
+      <h1 class="error-title">SOMETHING WENT WRONG</h1>
+
+      <p id="error-message" class="error-message">
+        We could not load your data. Please try logging in again.
+      </p>
+
+      <button id="back-to-login" class="error-button">
+        BACK TO LOGIN
+      </button>
+    </div>
+  </main>
+
+  <script>
+  const msgEl = document.getElementById("error-message");
+  const savedMsg = localStorage.getItem("errorMessage");
+  if (savedMsg) {
+    msgEl.textContent = savedMsg;
+  }
+
+  // sounds
+  const hurtSound = document.getElementById("hurt-sound");
+  const clickSound = document.getElementById("click-sound");
+  const backButton = document.getElementById("back-to-login");
+
+  let hurtPendingOnInteraction = false;
+
+  if (hurtSound) {
+    hurtSound.currentTime = 0;
+    hurtSound.play().catch(() => {
+      hurtPendingOnInteraction = true;
+    });
+  }
+
+  function triggerHurtOnce() {
+    if (!hurtPendingOnInteraction || !hurtSound) return;
+
+    hurtSound.currentTime = 0;
+    hurtSound.play().catch(() => {});
+
+    hurtPendingOnInteraction = false;
+    window.removeEventListener("pointerdown", triggerHurtOnce);
+    window.removeEventListener("keydown", triggerHurtOnce);
+  }
+
+  window.addEventListener("pointerdown", triggerHurtOnce);
+  window.addEventListener("keydown", triggerHurtOnce);
+
+  if (backButton) {
+    backButton.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(() => {});
+      }
+
+      setTimeout(() => {
+        window.location.href = "auth.html";
+      }, 150);
+    });
+  }
+</script>
+
+
+</body>
+</html>

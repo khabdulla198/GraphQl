@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GraphQL Dashboard</title>
+    <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+    <div id="profile-container">
+
+        <div class="dashboard-header-row">
+            <div>
+                <h1 class="dashboard-title">
+                    Welcome, <span id="user-login"></span>
+                </h1>
+                <p class="dashboard-subtitle">
+                    User ID: <span id="user-id"></span>
+                    &nbsp;·&nbsp;
+                    Cohort: <span id="user-cohort"></span>
+                    &nbsp;·&nbsp;
+                    Current project: <span id="current-project"></span>
+                </p>
+            </div>
+            <audio id="click-sound" src="../sounds/minecraft_click.mp3" preload="auto"></audio>
+            <button id="logoutButton">Logout</button>
+        </div>
+
+        <main class="dashboard-grid">
+
+            <section class="tile tile-total-xp">
+                <h2>Total XP</h2>
+                <p id="total-xp" class="xp-total-number">0</p>
+
+                <img id="xp-avatar" class="xp-avatar" src="../imgs/minecraftFemaleClear.png" alt="Minecraft avatar" />
+                
+            </section>
+
+            <section class="tile tile-audit-combined">
+                <h2>Audit Ratio</h2>
+                <svg id="audit-ratio-chart"></svg>
+                <p class="stat-mini">
+                    <span id="audit-up-text"></span><br />
+                    <br>
+                    <span id="audit-down-text"></span>
+                </p>
+
+            </section>
+
+            <section class="tile tile-project-status">
+                <div class="project-status-text">
+                    <h2>Projects Status</h2>
+                    <br>
+                    <p>Passed: <span id="projects-passed"></span></p>
+                    <br>
+                    <p>Failed: <span id="projects-failed"></span></p>
+                </div>
+                <div class="project-status-layout">
+                    <svg id="project-status-chart"></svg>
+                </div>
+            </section>
+
+            <section class="tile tile-xp-chart">
+                <h2>XP Progression</h2>
+                <svg id="xp-progress-chart"></svg>
+            </section>
+
+            <section id="recent-projects-card" class="tile tile-recent-projects">
+                <h2>Recent Projects</h2>
+                <div id="recent-projects-list"></div>
+            </section>
+
+
+
+        </main>
+    </div>
+
+    <script src="../JS/dashboard.js"></script>
+</body>
+
+</html>
