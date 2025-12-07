@@ -1,0 +1,614 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+/* ============================================
+   COLOR VARIABLES
+   ============================================ */
+:root {
+  --text-main: #141414;
+  --text-light: #ffffff;
+  --text-muted: #333333;
+
+  --tile-bg: rgba(255, 255, 255, 0.7);
+  --tile-border: rgba(255, 255, 255, 0.9);
+
+  --highlight-green: #b6ff4b;
+  --highlight-pink: #ff74c8;
+
+  --shadow-tile: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+
+/* ============================================
+   PAGE BACKGROUND + BLUR
+   ============================================ */
+body {
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  color: var(--text-main);
+  position: relative;
+  overflow-x: hidden;
+  padding: 30px 40px 40px;
+}
+
+/* Blurred Minecraft background behind everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("imgs/MinecraftBackground1.jpg") center/cover fixed no-repeat;
+  filter: blur(6px) brightness(1.05);
+  transform: scale(1.05); /* avoid blur edges */
+  z-index: -1;
+}
+
+/* ============================================
+   SHARED TYPOGRAPHY
+   ============================================ */
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+/* ============================================
+   MAIN DASHBOARD CONTAINER
+   ============================================ */
+#profile-container {
+  max-width: none;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ============================================
+   HEADER / BASIC INFO
+   ============================================ */
+.dashboard-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 26px;
+}
+
+.dashboard-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--text-light);
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.dashboard-subtitle {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #000000;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Logout button */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffe288, #ffdb55);
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: transform 0.12s, filter 0.12s, box-shadow 0.12s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* Base tile style */
+.tile {
+  background: var(--tile-bg);
+  border: 1px solid var(--tile-border);
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  box-shadow: var(--shadow-tile);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.tile h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* big number style */
+.stat-big {
+  font-size: 26px;
+  font-weight: 700;
+  margin-top: 4px;
+  color: var(--highlight-green);
+}
+
+.stat-mini {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* Total XP tile – background will be overridden in JS */
+.tile-total-xp {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ffffff;
+  background: linear-gradient(135deg, #ff89d2, #ffd9eb);
+  position: relative;
+
+  padding-right: 190px;
+}
+
+/* number + avatar row */
+.xp-main-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 18px;
+}
+
+
+
+/* big XP number */
+.xp-total-number {
+  font-size: 40px;
+  margin-top: 12px;
+  color: #000000;
+}
+
+/* Minecraft avatar inside XP tile */
+.xp-avatar {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  bottom: 16px;
+
+  /* scale with the card height */
+  max-height: calc(100% - 32px);
+  width: auto;
+
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+  pointer-events: none;
+}
+
+
+/* Combined Audit tile (number + XP-style bar) */
+.tile-audit-combined {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Project status tile (text + cake donut) */
+.tile-project-status {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* XP chart tile: full width */
+.tile-xp-chart {
+  grid-column: 1 / span 3;
+}
+
+.tile-recent-projects {
+  grid-column: 1 / span 3;   /* <– this makes it span all 3 columns */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 22px 22px; 
+}
+
+.tile-recent-projects h2 {
+  font-size: 22px;         
+  margin-bottom: 14px;
+}
+
+/* ============================================
+   SVG AREAS
+   ============================================ */
+#xp-progress-chart {
+  width: 100%;
+  height: 260px;
+}
+
+/* Minecraft-style audit bar container */
+#audit-ratio-chart {
+  width: 100%;
+  height: 110px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+/* Project status donut */
+#project-status-chart {
+  width: 190px;
+  height: 190px;
+}
+
+/* small layout helper for project card */
+.project-status-layout {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* numbers inside project status card */
+.tile-project-status p {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+/* ============================================
+   RECENT PROJECTS LIST
+   ============================================ */
+#recent-projects-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 10px 10px 10px;
+  max-height: 300px;         /* a bit taller */
+  overflow-y: auto;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+#recent-projects-list li {
+  padding: 6px 10px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  transition: background 0.12s, transform 0.12s;
+}
+
+#recent-projects-list li:hover {
+  background: #ffffff;
+  transform: translateX(3px);
+}
+
+/* ============================================
+   XP TOOLTIP (for hover points)
+   ============================================ */
+.xp-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: #f7faff;
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: #111827;
+  font-size: 11px;
+  line-height: 1.35;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e5e7eb;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+  z-index: 9999;
+}
+
+.xp-tooltip-date {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.xp-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.xp-tooltip-label {
+  text-transform: uppercase;
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.xp-tooltip-xp {
+  font-weight: 700;
+  color: var(--highlight-green);
+  -webkit-text-stroke: 0.1px#000000;
+
+    /* text-shadow:
+    1px 1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px -1px 0 #000000,
+    -1px -1px 0 #000000; */
+}
+
+.xp-tooltip-project {
+  margin-top: 4px;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================
+   LOGIN / ERROR PAGES (they still use .card)
+   ============================================ */
+.card {
+  width: 100%;
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 20px 22px 22px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  box-shadow: var(--shadow-tile);
+}
+
+/* basic form styling */
+.form-group {
+  margin-top: 14px;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+input {
+  width: 100%;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid #d4d4d4;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #818cf8;
+}
+
+.error-text {
+  margin-top: 10px;
+  color: #dc2626;
+  font-size: 11px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  body {
+    padding: 20px 14px 30px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tile-xp-chart,
+  .tile-recent-projects {
+    grid-column: 1 / span 1;
+  }
+
+  .dashboard-title {
+    font-size: 26px;
+  }
+
+  .dashboard-header-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  button {
+    align-self: flex-end;
+  }
+
+  .tile-total-xp {
+    padding-right: 150px;
+  }
+}
+
+/* Recent Projects list layout */
+#recent-projects-list {
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 6px;
+  width: 100%;
+}
+
+/* One row */
+.recent-project-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 14px;
+  margin-bottom: 6px;
+
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+
+  font-family: "Minecraft", monospace;
+  font-size: 14px;
+  color: #222;
+}
+
+/* left side: project name */
+.project-name {
+  font-weight: 600;
+  max-width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 18px;
+}
+
+/* right side: XP */
+.project-xp {
+  font-weight: 800;
+  color: #69ff57;
+  font-size: 20px;
+  -webkit-text-stroke: 0.6px #000;
+  text-shadow:
+    1px 1px 0 #000,
+    -1px 1px 0 #000,
+    1px -1px 0 #000,
+    -1px -1px 0 #000;
+}
+
+
+/* Gold highlight for in-progress projects */
+.recent-project-row.in-progress {
+  background: rgba(255, 215, 0, 0.25);
+  border-color: rgba(255, 215, 0, 0.65);
+}
+
+.recent-project-row.in-progress .project-name {
+  color: #b8860b; /* Minecraft golden color */
+  font-weight: 700;
+}
+
+.recent-project-row.in-progress .project-xp {
+  color: #b8860b;
+  -webkit-text-stroke: 0.6px #000;
+}
+
+
+/* ============================
+   ERROR PAGE – "YOU DIED" STYLE
+   ============================ */
+
+/* Only for error.html */
+body.error-page {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+/* keep your background image, then add a red death overlay on top */
+body.error-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("imgs/MinecraftBackground1.jpg") center/cover fixed no-repeat;
+  filter: blur(5px) brightness(0.6);
+  transform: scale(1.05);
+  z-index: -2;
+}
+
+/* dark red vignette */
+body.error-page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at center,
+      rgba(255, 0, 0, 0.0) 0%,
+      rgba(120, 0, 0, 0.45) 55%,
+      rgba(20, 0, 0, 0.9) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* center content */
+.error-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* main death message panel */
+.error-panel {
+  padding: 40px 60px 46px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 18px;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.9);
+}
+
+/* "YOU DIED" style heading */
+.error-title {
+  font-size: 40px;
+  line-height: 1.3;
+  color: #ff5555;
+  text-transform: uppercase;
+  text-shadow:
+    3px 3px 0 #000000,
+    -3px 3px 0 #000000,
+    3px -3px 0 #000000,
+    -3px -3px 0 #000000;
+  margin-bottom: 20px;
+}
+
+/* error text underneath */
+.error-message {
+  max-width: 520px;
+  margin: 0 auto 32px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+/* green "RESPAWN"-style button */
+.error-button {
+  cursor: pointer;
+  padding: 14px 60px;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #747474;
+  
+  background-color: #3aaa39;        /* green fill */
+  border: 4px solid #0b3a08;        /* dark border */
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 3px #6adf6a,              /* light green outline */
+    0 8px 0 #214814;                /* bottom "depth" */
+  transition: transform 0.08s ease-out,
+              box-shadow 0.08s ease-out,
+              filter 0.08s ease-out;
+}
+
+.error-button:hover {
+  filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 3px #6adf6a,
+    0 10px 0 #214814;
+}
+
+.error-button:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 0 0 3px #6adf6a,
+    0 3px 0 #214814;
+}

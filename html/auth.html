@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphQL Login</title>
+    <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+    <div id="login-container" class="card">
+        <h1 >GraphQL</h1>
+<br>
+
+        <div class="form-group">
+            <label for="identifier">Username or Email</label>
+            <input type="text" id="identifier" placeholder="username or email" />
+        </div>
+<br>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="password" />
+        </div>
+<br><br>
+<audio id="click-sound" src="../sounds/minecraft_click.mp3" type="audio/mpeg" preload="auto"></audio>
+        <button id="loginButton">Login</button>
+<br><br>
+        <p id="login-error" class="error-text"></p>
+
+    </div>
+
+    <script src="../JS/auth.js"></script>
+</body>
+
+</html>
