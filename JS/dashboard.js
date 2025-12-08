@@ -222,8 +222,7 @@ function formatXp(amount) {
   const abs = Math.abs(amount);
 
   if (abs >= 1000) {
-    let value = (abs / 1000).toFixed(1);
-    if (value.endsWith(".0")) value = value.slice(0, -2);
+    let value = Math.round(abs / 1000);
     return `${sign}${value}kB`;
   } else {
     return `${sign}${abs}B`;
@@ -917,3 +916,4 @@ function drawProjectStatusDonut(passed, failed) {
   text.textContent = passPercent + "%";
   projectStatusChart.appendChild(text);
 }
+
