@@ -222,12 +222,26 @@ function formatXp(amount) {
   const abs = Math.abs(amount);
 
   if (abs >= 1000) {
+    let value = (abs / 1000).toFixed(1);
+    if (value.endsWith(".0")) value = value.slice(0, -2);
+    return `${sign}${value}kB`;
+  } else {
+    return `${sign}${abs}B`;
+  }
+}
+
+function formatTotalXp(amount) {
+  const sign = amount < 0 ? "-" : "";
+  const abs = Math.abs(amount);
+
+  if (abs >= 1000) {
     let value = Math.round(abs / 1000);
     return `${sign}${value}kB`;
   } else {
     return `${sign}${abs}B`;
   }
 }
+
 
 async function loadXpProgression(userId) {
   const xpQuery = `
@@ -298,11 +312,10 @@ function updateXpSection(boardEvents, currentProjectName) {
       totalBytes += ev.amount;
     }
   });
-  totalXpSpan.textContent = formatXp(totalBytes);
+  totalXpSpan.textContent = formatTotalXp(totalBytes);
 
   const rows = [];
 
-  // check if current project already has an XP record (same last path segment)
   let currentHasXp = false;
   if (currentProjectName && currentProjectName !== "None") {
     const currentLower = currentProjectName.toLowerCase();
@@ -314,7 +327,6 @@ function updateXpSection(boardEvents, currentProjectName) {
     });
   }
 
-  // only show "In progress" row if there is no XP entry for that project yet
   if (
     currentProjectName &&
     currentProjectName !== "None" &&
@@ -916,4 +928,3 @@ function drawProjectStatusDonut(passed, failed) {
   text.textContent = passPercent + "%";
   projectStatusChart.appendChild(text);
 }
-
