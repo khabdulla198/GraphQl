@@ -242,15 +242,20 @@ function formatTotalXp(amount) {
   const sign = amount < 0 ? "-" : "";
   const abs = Math.abs(amount);
 
+  function format(value, unit) {
+    
+    let num = value.toFixed(2); 
+    num = num.replace(/\.?0+$/, ""); 
+    return `${sign}${num}${unit}`;
+  }
+
   if (abs >= 1_000_000) {
-    
-    let value = Math.round(abs / 1_000_000);
-    return `${sign}${value}MB`;
-  } else if (abs >= 1000) {
-    
-    let value = Math.round(abs / 1000);
-    return `${sign}${value}kB`;
-  } else {
+    return format(abs / 1_000_000, "MB");
+  } 
+  else if (abs >= 1000) {
+    return format(abs / 1000, "kB");
+  } 
+  else {
     return `${sign}${abs}B`;
   }
 }
@@ -322,7 +327,7 @@ function updateXpSection(boardEvents, currentProjectName) {
       totalBytes += ev.amount;
     }
   });
-  totalXpSpan.textContent = formatXp(totalBytes);
+  totalXpSpan.textContent = formatTotalXp(totalBytes);
 
   const rows = [];
 
@@ -938,4 +943,5 @@ function drawProjectStatusDonut(passed, failed) {
   text.textContent = passPercent + "%";
   projectStatusChart.appendChild(text);
 }
+
 
