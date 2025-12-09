@@ -241,23 +241,18 @@ function formatXp(amount) {
 function formatTotalXp(amount) {
   const sign = amount < 0 ? "-" : "";
   const abs = Math.abs(amount);
-
-  function format(value, unit) {
-    
-    let num = value.toFixed(2); 
-    num = num.replace(/\.?0+$/, ""); 
-    return `${sign}${num}${unit}`;
-  }
-
+  
   if (abs >= 1_000_000) {
-    return format(abs / 1_000_000, "MB");
-  } 
-  else if (abs >= 1000) {
-    return format(abs / 1000, "kB");
-  } 
-  else {
-    return `${sign}${abs}B`;
+    let value = (abs / 1_000_000).toFixed(2);
+    return `${sign}${value}MB`;
   }
+
+  if (abs >= 1000) {
+    let value = Math.round(abs / 1000);
+    return `${sign}${value}kB`;
+  }
+
+  return `${sign}${abs}B`;
 }
 
 
@@ -943,5 +938,6 @@ function drawProjectStatusDonut(passed, failed) {
   text.textContent = passPercent + "%";
   projectStatusChart.appendChild(text);
 }
+
 
 
