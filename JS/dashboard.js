@@ -322,7 +322,7 @@ function updateXpSection(boardEvents, currentProjectName) {
       totalBytes += ev.amount;
     }
   });
-  totalXpSpan.textContent = formatTotalXp(totalBytes);
+  totalXpSpan.textContent = formatXp(totalBytes);
 
   const rows = [];
 
@@ -938,3 +938,4 @@ function drawProjectStatusDonut(passed, failed) {
   text.textContent = passPercent + "%";
   projectStatusChart.appendChild(text);
 }
+
