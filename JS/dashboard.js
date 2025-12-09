@@ -221,26 +221,40 @@ function formatXp(amount) {
   const sign = amount < 0 ? "-" : "";
   const abs = Math.abs(amount);
 
-  if (abs >= 1000) {
+  if (abs >= 1_000_000) {
+    
+    let value = (abs / 1_000_000).toFixed(1);
+    if (value.endsWith(".0")) value = value.slice(0, -2);
+    return `${sign}${value}MB`;
+  } else if (abs >= 1000) {
+    
     let value = (abs / 1000).toFixed(1);
     if (value.endsWith(".0")) value = value.slice(0, -2);
     return `${sign}${value}kB`;
   } else {
+    
     return `${sign}${abs}B`;
   }
 }
+
 
 function formatTotalXp(amount) {
   const sign = amount < 0 ? "-" : "";
   const abs = Math.abs(amount);
 
-  if (abs >= 1000) {
+  if (abs >= 1_000_000) {
+    
+    let value = Math.round(abs / 1_000_000);
+    return `${sign}${value}MB`;
+  } else if (abs >= 1000) {
+    
     let value = Math.round(abs / 1000);
     return `${sign}${value}kB`;
   } else {
     return `${sign}${abs}B`;
   }
 }
+
 
 
 async function loadXpProgression(userId) {
@@ -272,28 +286,24 @@ async function loadXpProgression(userId) {
 
 function isBoardXp(ev) {
   if (!ev || !ev.path) return false;
+
   const path = ev.path.toLowerCase();
+  
+  const segments = path.split("/").filter(Boolean);
+  
+  if (segments[0] !== "bahrain") return false;
+  if (segments[1] !== "bh-module") return false;
 
-  if (ev.originEventId === 250 && path.startsWith("/bahrain/bh-module/")) {
+  if (segments.length === 3) {
     return true;
   }
 
-  if (
-    ev.originEventId === 874 &&
-    path === "/bahrain/bh-module/piscine-js"
-  ) {
+  if (segments.length === 4 && segments[2] === "checkpoint") {
     return true;
   }
-
-  if (
-    (ev.originEventId === 485 || ev.originEventId === 497) &&
-    path.startsWith("/bahrain/bh-module/checkpoint/")
-  ) {
-    return true;
-  }
-
   return false;
 }
+
 
 
 function updateXpSection(boardEvents, currentProjectName) {
@@ -333,7 +343,7 @@ function updateXpSection(boardEvents, currentProjectName) {
     !currentHasXp
   ) {
     rows.push({
-      name: `${currentProjectName} – In progress`,
+      name: `${currentProjectName} - In progress`,
       xp: "",
       inProgress: true,
     });
